@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alambana Program </title>
+    <meta name="description" content="Program latihan intensif 2 hari untuk sixpack tegas dan sayap yang keluar">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-red: #FF4444;
+            --primary-orange: #FF8844;
+            --dark-bg: #0a0a0a;
+            --dark-card: #1a1a1a;
+            --text-light: #ffffff;
+            --text-gray: #cccccc;
+            --accent-green: #4CAF50;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Arial Black', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1a2e 100%);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--primary-red);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-orange));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin: 0.5rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .target-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .target-card {
+            background: var(--dark-card);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .target-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-red);
+        }
+
+        .target-card.sixpack {
+            border-left: 5px solid var(--primary-red);
+        }
+
+        .target-card.wings {
+            border-left: 5px solid var(--primary-orange);
+        }
+
+        .target-card.strength {
+            border-left: 5px solid var(--accent-green);
+        }
+
+        .day-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .day-button {
+            background: var(--dark-card);
+            color: var(--text-light);
+            border: 2px solid var(--primary-red);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .day-button.active {
+            background: var(--primary-red);
+        }
+
+        .workout-container {
+            background: var(--dark-card);
+            margin: 2rem 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .workout-header {
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-orange));
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .workout-phase {
+            border-bottom: 1px solid #333;
+            padding: 2rem;
+        }
+
+        .workout-phase:last-child {
+            border-bottom: none;
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            padding: 1rem;
+            background: rgba(255, 68, 68, 0.1);
+            border-radius: 10px;
+        }
+
+        .phase-content {
+            display: none;
+            padding: 1rem 0;
+        }
+
+        .phase-content.active {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .exercise-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .exercise-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-orange);
+        }
+
+        .exercise-info {
+            flex-grow: 1;
+        }
+
+        .exercise-name {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .exercise-reps {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .timer-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--dark-card);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            display: none;
+        }
+
+        .timer-container.active {
+            display: block;
+            animation: zoomIn 0.3s ease-out;
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--primary-red);
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-orange));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .water-tracker {
+            background: var(--dark-card);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .water-cups {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .water-cup {
+            width: 60px;
+            height: 80px;
+            background: #333;
+            border: 2px solid #555;
+            border-radius: 0 0 20px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .water-cup.filled {
+            background: linear-gradient(to top, #4FC3F7, #29B6F6);
+            border-color: #29B6F6;
+        }
+
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .achievement-badge {
+            background: var(--dark-card);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-badge.unlocked {
+            opacity: 1;
+            background: linear-gradient(45deg, var(--accent-green), #66BB6A);
+        }
+
+        .streak-counter {
+            text-align: center;
+            padding: 2rem;
+            background: var(--dark-card);
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .streak-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-red);
+        }
+
+        .nutrition-tips {
+            background: var(--dark-card);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .tip-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .target-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .day-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .water-cups {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .exercise-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .timer-container {
+                width: 90%;
+                max-width: 400px;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            color: #333;
+        }
+
+        body.light-mode .target-card,
+        body.light-mode .workout-container,
+        body.light-mode .water-tracker,
+        body.light-mode .nutrition-tips,
+        body.light-mode .streak-counter,
+        body.light-mode .achievement-badge,
+        body.light-mode .timer-container {
+            background: #fff;
+            color: #333;
+        }
+
+        body.light-mode .day-button {
+            background: #fff;
+            color: #333;
+        }
+
+        .focus-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--dark-bg);
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .focus-mode.active {
+            display: flex;
+        }
+
+        .focus-message {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: var(--primary-red);
+        }
+
+        .exercise-item.completed {
+            opacity: 0.6;
+        }
+
+        .exercise-item.completed .exercise-name,
+        .exercise-item.completed .exercise-reps {
+            text-decoration: line-through;
+        }
+
+        .achievements-section h3 {
+            text-align: center;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">🌓</button>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>2-DAY SIXPACK & WINGS CHALLENGE</h1>
+                <p class="hero-subtitle">🎯 Program Intensif untuk Sixpack Tegas & Sayap yang Keluar</p>
+                <button class="cta-button" onclick="startChallenge()">🔥 MULAI CHALLENGE</button>
+                <button class="cta-button" onclick="toggleFocusMode()">✈️ MODE FOKUS</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Target Section -->
+        <section class="targets">
+            <h2 style="text-align: center; margin: 3rem 0 2rem;">🎯 TARGET ACHIEVEMENT</h2>
+            <div class="target-grid">
+                <div class="target-card sixpack">
+                    <h3>💪 SIXPACK TEGAS</h3>
+                    <p>Otot perut lebih tegas dan berbayang dengan definisi yang jelas terlihat</p>
+                </div>
+                <div class="target-card wings">
+                    <h3>🦅 SAYAP KELUAR</h3>
+                    <p>Lats & serratus berkembang dan terlihat dari samping, menciptakan siluet V-shape</p>
+                </div>
+                <div class="target-card strength">
+                    <h3>🔥 OTOT KENCANG</h3>
+                    <p>Sensasi otot yang kencang dan tebal setelah setiap sesi latihan intensif</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Tracker -->
+        <section class="streak-counter">
+            <h3>🔥 STREAK KONSISTENSI</h3>
+            <div class="streak-number" id="streakCount">0</div>
+            <p>Hari berturut-turut menyelesaikan challenge</p>
+        </section>
+
+        <!-- Day Selector -->
+        <div class="day-selector">
+            <button class="day-button active" onclick="selectDay(1)" id="day1Btn">
+                🟥 HARI 1 - CORE + SAYAP
+            </button>
+            <button class="day-button" onclick="selectDay(2)" id="day2Btn">
+                🟧 HARI 2 - PENGERINGAN
+            </button>
+        </div>
+
+        <!-- Workout Container -->
+        <div id="workoutContainer"></div>
+
+        <!-- Water Tracker -->
+        <section class="water-tracker">
+            <h3>💧 TRACKER AIR MINUM</h3>
+            <p>Target: 3-4 liter per hari</p>
+            <div class="water-cups" id="waterCups"></div>
+            <p id="waterCount">0/12 gelas (250ml)</p>
+        </section>
+
+        <!-- Achievements -->
+        <section class="achievements-section">
+            <h3>🏆 ACHIEVEMENTS</h3>
+            <div class="achievements" id="achievements">
+                <div class="achievement-badge" data-achievement="first-day">
+                    <h4>🎯 First Strike</h4>
+                    <p>Selesaikan Hari 1</p>
+                </div>
+                <div class="achievement-badge" data-achievement="full-challenge">
+                    <h4>💪 Challenge Master</h4>
+                    <p>Selesaikan 2 Hari Penuh</p>
+                </div>
+                <div class="achievement-badge" data-achievement="hydration">
+                    <h4>💧 Hydration Hero</h4>
+                    <p>Minum 3L dalam sehari</p>
+                </div>
+                <div class="achievement-badge" data-achievement="consistency">
+                    <h4>🔥 Consistency King</h4>
+                    <p>3 hari berturut-turut</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nutrition Tips -->
+        <section class="nutrition-tips">
+            <h3>🥗 TIPS NUTRISI OPTIMAL</h3>
+            <div class="tip-item">
+                <div class="tip-icon">💧</div>
+                <div>
+                    <strong>Hidrasi Maksimal:</strong> 3-4 liter air putih untuk membuang retensi air
+                </div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon">🚫</div>
+                <div>
+                    <strong>Hindari:</strong> Garam berlebihan, gula, gorengan, makanan instan
+                </div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon">💡</div>
+                <div>
+                    <strong>Pencahayaan:</strong> Cek hasil di pencahayaan yang baik untuk melihat definisi otot
+                </div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon">🔥</div>
+                <div>
+                    <strong>Intensitas:</strong> Latihan sampai otot terasa panas dan sedikit gemetar
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Timer Modal -->
+    <div class="timer-container" id="timerModal">
+        <div class="timer-display" id="timerDisplay">00:00</div>
+        <div style="text-align: center; margin-bottom: 1rem;">
+            <div id="timerLabel">Rest Time</div>
+        </div>
+        <div class="timer-controls">
+            <button class="cta-button" onclick="startTimer()">▶️ Start</button>
+            <button class="cta-button" onclick="pauseTimer()">⏸️ Pause</button>
+            <button class="cta-button" onclick="stopTimer()">⏹️ Stop</button>
+        </div>
+    </div>
+
+    <!-- Focus Mode -->
+    <div class="focus-mode" id="focusMode">
+        <div class="focus-message">
+            ✈️ MODE FOKUS AKTIF<br>
+            <small>Tidak ada distraksi. Fokus pada latihan!</small>
+        </div>
+        <button class="cta-button" onclick="toggleFocusMode()">Keluar dari Mode Fokus</button>
+    </div>
+
+    <script>
+        // Global Variables
+        let currentDay = 1;
+        let timerInterval;
+        let currentTime = 0;
+        let isTimerRunning = false;
+        let waterCount = 0;
+        let streakCount = parseInt(localStorage.getItem('streakCount')) || 0;
+        let lastWorkoutDate = localStorage.getItem('lastWorkoutDate') || '';
+        
+        // Workout Data
+        const workoutData = {
+            1: {
+                title: "HARI 1 — CORE + UPPER BACK (Sayap)",
+                duration: "90–120 menit",
+                rest: "30–45 detik",
+                phases: [
+                    {
+                        name: "🔥 Pemanasan",
+                        duration: "10 menit",
+                        exercises: [
+                            {name: "Lompat tali / jogging di tempat", reps: "3 menit"},
+                            {name: "Arm swings, shoulder roll, torso twist", reps: "2 menit"},
+                            {name: "High knees", reps: "1 menit"},
+                            {name: "Burpees ringan", reps: "2 menit"},
+                            {name: "Plank hold", reps: "2 menit"}
+                        ]
+                    },
+                    {
+                        name: "💥 Core Blast",
+                        duration: "3 Ronde",
+                        exercises: [
+                            {name: "Leg Raises", reps: "20 reps"},
+                            {name: "V-Up", reps: "20 reps"},
+                            {name: "Bicycle Crunch", reps: "1 menit"},
+                            {name: "Side Plank Dip", reps: "20/sisi"},
+                            {name: "Plank Reach", reps: "1 menit"}
+                        ]
+                    },
+                    {
+                        name: "🦅 Serratus & Sayap Pump",
+                        duration: "4 Ronde",
+                        exercises: [
+                            {name: "Wide Push-Up", reps: "15 reps"},
+                            {name: "Superman Pull", reps: "15 reps"},
+                            {name: "Serratus Push", reps: "20 reps"},
+                            {name: "Shadow Boxing cepat", reps: "1 menit"},
+                            {name: "Lat Squeeze Pose", reps: "30 detik"}
+                        ]
+                    },
+                    {
+                        name: "🎯 Finisher Core",
+                        duration: "Tanpa Istirahat - 2x",
+                        exercises: [
+                            {name: "Flutter Kick", reps: "1 menit"},
+                            {name: "Plank", reps: "2 menit"},
+                            {name: "Mountain Climber", reps: "1 menit"},
+                            {name: "Vacuum Hold", reps: "30 detik"}
+                        ]
+                    },
+                    {
+                        name: "🧘 Pendinginan",
+                        duration: "5–10 menit",
+                        exercises: [
+                            {name: "Stretch perut", reps: "2 menit"},
+                            {name: "Stretch pinggang", reps: "2 menit"},
+                            {name: "Stretch punggung", reps: "2 menit"},
+                            {name: "Tarik napas dalam", reps: "4 menit"}
+                        ]
+                    }
+                ]
+            },
+            2: {
+                title: "HARI 2 — FULL CORE + PENGERINGAN",
+                duration: "90–120 menit",
+                rest: "30 detik",
+                phases: [
+                    {
+                        name: "🔥 Pemanasan",
+                        duration: "10 menit",
+                        exercises: [
+                            {name: "Lompat tali / jogging di tempat", reps: "3 menit"},
+                            {name: "Arm swings, shoulder roll, torso twist", reps: "2 menit"},
+                            {name: "High knees", reps: "1 menit"},
+                            {name: "Burpees ringan", reps: "2 menit"},
+                            {name: "Plank hold", reps: "2 menit"}
+                        ]
+                    },
+                    {
+                        name: "💪 Core Volume",
+                        duration: "4 Ronde",
+                        exercises: [
+                            {name: "Sit-Up Lambat", reps: "30 reps"},
+                            {name: "Toe Touch", reps: "25 reps"},
+                            {name: "Oblique Crunch", reps: "20/sisi"},
+                            {name: "Plank to Push-Up", reps: "1 menit"},
+                            {name: "Russian Twist", reps: "1 menit"}
+                        ]
+                    },
+                    {
+                        name: "🦅 Sayap & Upper Pump",
+                        duration: "4 Ronde",
+                        exercises: [
+                            {name: "Wide Push-Up", reps: "15 reps"},
+                            {name: "Dive Bomber Push-Up", reps: "12 reps"},
+                            {name: "Superman Hold", reps: "45 detik"},
+                            {name: "Shadow Boxing keras", reps: "1 menit"},
+                            {name: "Flex Pose sayap", reps: "30 detik"}
+                        ]
+                    },
+                    {
+                        name: "🔥 Fat Burn + Definisi",
+                        duration: "Tanpa istirahat - 3-4x",
+                        exercises: [
+                            {name: "Jump Squat", reps: "15 reps"},
+                            {name: "High Knees", reps: "1 menit"},
+                            {name: "Mountain Climber", reps: "1 menit"},
+                            {name: "Burpees", reps: "15 reps"}
+                        ]
+                    },
+                    {
+                        name: "🧘 Pendinginan",
+                        duration: "5–10 menit",
+                        exercises: [
+                            {name: "Stretch seluruh tubuh", reps: "10 menit"}
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            updateStreakDisplay();
+            generateWaterCups();
+            updateWorkoutDisplay();
+            loadProgress();
+            loadUnlockedAchievements();
+        });
+
+        function initializeApp() {
+            // Check if it's a new day
+            const today = new Date().toDateString();
+            if (lastWorkoutDate !== today) {
+                resetDailyProgress();
+            }
+        }
+
+        function updateStreakDisplay() {
+            document.getElementById('streakCount').textContent = streakCount;
+        }
+
+        function selectDay(day) {
+            currentDay = day;
+            
+            // Update button states
+            document.querySelectorAll('.day-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const dayBtn = document.getElementById(`day${day}Btn`);
+            if (dayBtn) {
+                dayBtn.classList.add('active');
+            }
+            
+            updateWorkoutDisplay();
+        }
+
+        function updateWorkoutDisplay() {
+            const container = document.getElementById('workoutContainer');
+            const workout = workoutData[currentDay];
+            
+            if (!workout || !container) return;
+            
+            let html = `
+                <div class="workout-container">
+                    <div class="workout-header">
+                        <h2>${workout.title}</h2>
+                        <p><strong>Durasi:</strong> ${workout.duration} | <strong>Istirahat:</strong> ${workout.rest}</p>
+                    </div>
+            `;
+            
+            workout.phases.forEach((phase, phaseIndex) => {
+                html += `
+                    <div class="workout-phase">
+                        <div class="phase-header" onclick="togglePhase(${phaseIndex})">
+                            <h3>${phase.name}</h3>
+                            <span>${phase.duration}</span>
+                        </div>
+                        <div class="phase-content" id="phase-${phaseIndex}">
+                            <div class="exercise-list">
+                `;
+                
+                phase.exercises.forEach((exercise, exerciseIndex) => {
+                    const exerciseId = `day${currentDay}-phase${phaseIndex}-exercise${exerciseIndex}`;
+                    html += `
+                        <div class="exercise-item" id="${exerciseId}">
+                            <div class="exercise-info">
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="check-${exerciseId}" onchange="toggleExerciseComplete('${exerciseId}')">
+                                    <div>
+                                        <div class="exercise-name">${exercise.name}</div>
+                                        <div class="exercise-reps">${exercise.reps}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="cta-button" onclick="startExerciseTimer('${exercise.name}', '${exercise.reps}')">⏱️</button>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function togglePhase(phaseIndex) {
+            const content = document.getElementById(`phase-${phaseIndex}`);
+            if (content) {
+                content.classList.toggle('active');
+            }
+        }
+
+        function toggleExerciseComplete(exerciseId) {
+            const exerciseItem = document.getElementById(exerciseId);
+            const checkbox = document.getElementById(`check-${exerciseId}`);
+            
+            if (exerciseItem && checkbox) {
+                if (checkbox.checked) {
+                    exerciseItem.classList.add('completed');
+                } else {
+                    exerciseItem.classList.remove('completed');
+                }
+                
+                saveProgress();
+                checkAchievements();
+            }
+        }
+
+        function startExerciseTimer(exerciseName, reps) {
+            const modal = document.getElementById('timerModal');
+            const label = document.getElementById('timerLabel');
+            
+            if (!modal || !label) return;
+            
+            label.textContent = `${exerciseName} - ${reps}`;
+            modal.classList.add('active');
+            
+            // Auto-start timer based on exercise type
+            if (reps.includes('menit')) {
+                const minutes = parseInt(reps);
+                currentTime = minutes * 60;
+            } else if (reps.includes('detik')) {
+                const seconds = parseInt(reps);
+                currentTime = seconds;
+            } else {
+                // For rep-based exercises, set a default timer
+                currentTime = 45; // 45 seconds default
+            }
+            
+            updateTimerDisplay();
+        }
+
+        function startTimer() {
+            if (!isTimerRunning) {
+                isTimerRunning = true;
+                timerInterval = setInterval(() => {
+                    if (currentTime > 0) {
+                        currentTime--;
+                        updateTimerDisplay();
+                    } else {
+                        stopTimer();
+                        playTimerComplete();
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+        }
+
+        function stopTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            const modal = document.getElementById('timerModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        function updateTimerDisplay() {
+            const timerDisplay = document.getElementById('timerDisplay');
+            if (timerDisplay) {
+                const minutes = Math.floor(currentTime / 60);
+                const seconds = currentTime % 60;
+                timerDisplay.textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+
+        function playTimerComplete() {
+            // Visual feedback for timer completion
+            const timerDisplay = document.getElementById('timerDisplay');
+            if (timerDisplay) {
+                timerDisplay.style.color = 'var(--accent-green)';
+                setTimeout(() => {
+                    timerDisplay.style.color = 'var(--primary-red)';
+                }, 2000);
+            }
+        }
+
+        function generateWaterCups() {
+            const container = document.getElementById('waterCups');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 12; i++) {
+                const cup = document.createElement('div');
+                cup.className = 'water-cup';
+                cup.onclick = () => toggleWaterCup(i);
+                container.appendChild(cup);
+            }
+            
+            updateWaterCount();
+        }
+
+        function toggleWaterCup(index) {
+            const cups = document.querySelectorAll('.water-cup');
+            const cup = cups[index];
+            
+            if (!cup) return;
+            
+            if (cup.classList.contains('filled')) {
+                // Remove this cup and all after it
+                for (let i = index; i < cups.length; i++) {
+                    cups[i].classList.remove('filled');
+                }
+            } else {
+                // Fill this cup and all before it
+                for (let i = 0; i <= index; i++) {
+                    cups[i].classList.add('filled');
+                }
+            }
+            
+            updateWaterCount();
+            checkAchievements();
+        }
+
+        function updateWaterCount() {
+            const filledCups = document.querySelectorAll('.water-cup.filled').length;
+            waterCount = filledCups;
+            const liters = (filledCups * 0.25).toFixed(1);
+            const waterCountElement = document.getElementById('waterCount');
+            if (waterCountElement) {
+                waterCountElement.textContent = 
+                    `${filledCups}/12 gelas (${liters}L dari 3-4L target)`;
+            }
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleFocusMode() {
+            const focusMode = document.getElementById('focusMode');
+            if (focusMode) {
+                focusMode.classList.toggle('active');
+            }
+        }
+
+        function startChallenge() {
+            const heroEnd = document.querySelector('.hero');
+            if (heroEnd) {
+                heroEnd.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'end'
+                });
+            }
+        }
+
+        function saveProgress() {
+            const progress = {
+                day: currentDay,
+                date: new Date().toDateString(),
+                waterCount: waterCount,
+                exercisesCompleted: getCompletedExercises(),
+                streakCount: streakCount
+            };
+            
+            localStorage.setItem('workoutProgress', JSON.stringify(progress));
+            localStorage.setItem('lastWorkoutDate', new Date().toDateString());
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('workoutProgress');
+            if (saved) {
+                try {
+                    const progress = JSON.parse(saved);
+                    
+                    // Restore water count
+                    waterCount = progress.waterCount || 0;
+                    const cups = document.querySelectorAll('.water-cup');
+                    for (let i = 0; i < waterCount && i < cups.length; i++) {
+                        cups[i].classList.add('filled');
+                    }
+                    updateWaterCount();
+                    
+                    // Restore completed exercises
+                    if (progress.exercisesCompleted && Array.isArray(progress.exercisesCompleted)) {
+                        setTimeout(() => {
+                            progress.exercisesCompleted.forEach(exerciseId => {
+                                const checkbox = document.getElementById(`check-${exerciseId}`);
+                                const exerciseItem = document.getElementById(exerciseId);
+                                if (checkbox && exerciseItem) {
+                                    checkbox.checked = true;
+                                    exerciseItem.classList.add('completed');
+                                }
+                            });
+                        }, 100);
+                    }
+                } catch (e) {
+                    console.warn('Error loading progress:', e);
+                }
+            }
+            
+            // Load theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+            }
+        }
+
+        function getCompletedExercises() {
+            const completed = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                const exerciseId = checkbox.id.replace('check-', '');
+                completed.push(exerciseId);
+            });
+            return completed;
+        }
+
+        function resetDailyProgress() {
+            // Reset water count
+            waterCount = 0;
+            document.querySelectorAll('.water-cup').forEach(cup => {
+                cup.classList.remove('filled');
+            });
+            updateWaterCount();
+            
+            // Save the new date
+            localStorage.setItem('lastWorkoutDate', new Date().toDateString());
+        }
+
+        function checkAchievements() {
+            // First Strike - Complete any workout phase
+            const completedExercises = getCompletedExercises();
+            if (completedExercises.length > 0) {
+                unlockAchievement('first-day');
+            }
+            
+            // Hydration Hero - 3L+ water
+            if (waterCount >= 12) { // 12 cups = 3L
+                unlockAchievement('hydration');
+            }
+            
+            // Challenge Master - Complete significant portion
+            if (completedExercises.length >= 15) {
+                unlockAchievement('full-challenge');
+                updateStreak();
+            }
+            
+            // Consistency King - 3+ day streak
+            if (streakCount >= 3) {
+                unlockAchievement('consistency');
+            }
+        }
+
+        function unlockAchievement(achievementId) {
+            const badge = document.querySelector(`[data-achievement="${achievementId}"]`);
+            if (badge && !badge.classList.contains('unlocked')) {
+                badge.classList.add('unlocked');
+                const title = badge.querySelector('h4');
+                if (title) {
+                    showAchievementNotification(title.textContent);
+                }
+                
+                // Save unlocked achievements
+                let unlockedAchievements = [];
+                try {
+                    unlockedAchievements = JSON.parse(localStorage.getItem('unlockedAchievements')) || [];
+                } catch (e) {
+                    unlockedAchievements = [];
+                }
+                
+                if (!unlockedAchievements.includes(achievementId)) {
+                    unlockedAchievements.push(achievementId);
+                    localStorage.setItem('unlockedAchievements', JSON.stringify(unlockedAchievements));
+                }
+            }
+        }
+
+        function showAchievementNotification(title) {
+            // Create temporary notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: var(--accent-green);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 10px;
+                z-index: 1001;
+                animation: slideInRight 0.5s ease-out;
+                box-shadow: var(--shadow);
+                max-width: 300px;
+            `;
+            notification.innerHTML = `🏆 Achievement Unlocked: ${title}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+
+        function updateStreak() {
+            const today = new Date().toDateString();
+            const lastDate = localStorage.getItem('lastWorkoutDate');
+            
+            if (lastDate !== today) {
+                streakCount++;
+                localStorage.setItem('streakCount', streakCount.toString());
+                localStorage.setItem('lastWorkoutDate', today);
+                updateStreakDisplay();
+            }
+        }
+
+        // Load unlocked achievements on page load
+        function loadUnlockedAchievements() {
+            let unlockedAchievements = [];
+            try {
+                unlockedAchievements = JSON.parse(localStorage.getItem('unlockedAchievements')) || [];
+            } catch (e) {
+                unlockedAchievements = [];
+            }
+            
+            unlockedAchievements.forEach(achievementId => {
+                const badge = document.querySelector(`[data-achievement="${achievementId}"]`);
+                if (badge) {
+                    badge.classList.add('unlocked');
+                }
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                stopTimer();
+                const focusMode = document.getElementById('focusMode');
+                if (focusMode && focusMode.classList.contains('active')) {
+                    toggleFocusMode();
+                }
+            }
+            
+            const timerModal = document.getElementById('timerModal');
+            if (e.key === ' ' && timerModal && timerModal.classList.contains('active')) {
+                e.preventDefault();
+                if (isTimerRunning) {
+                    pauseTimer();
+                } else {
+                    startTimer();
+                }
+            }
+        });
+
+        // Auto-save progress every 30 seconds
+        setInterval(() => {
+            try {
+                saveProgress();
+            } catch (e) {
+                console.warn('Error auto-saving progress:', e);
+            }
+        }, 30000);
+
+    </script>
+</body>
+</html>
